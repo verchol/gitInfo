@@ -1,0 +1,48 @@
+version: '1.0'
+kind: pipeline
+metadata:
+  name: {{.Project.Name}}/webinar-canary2
+  labels:
+    tags: ["cd", "kuberentes"]
+  deprecate:
+    applicationPort: '8080'
+    repoPipeline: true
+  project: {{.Project.Name}}
+spec:
+  triggers:
+    {{- range .Triggers}}
+       Name : {{.Name}}
+       Spec :
+         triggerType: {{.Spec.TriggerType}}
+         provider: {{.Spec.Provider}}
+         repo: {{.Spec.Repo}}
+         events:
+          {{- range .Spec.Events}}
+           - {{ . }}
+          {{end}}
+         branchRegex: {{.Spec.BranchRegex}}
+
+    {{end}}
+
+  contexts: []
+  variables:
+    - key: PORT
+      value: '8080'
+    - key: CHART_NAME
+      value: canary
+    - key: RELEASE_NAME
+      value: canaryRelease
+    - key: KUBE_CONTEXT
+      value: cf-load@codefresh-load
+    - key: NAMESPACE
+      value : default
+    - key: DEBUG_CHART=
+      value: false
+    - key: CHART_REPO_URL
+      value: ./deploy/canary
+  specTemplate:
+    location: git
+    repo: {{(index .Triggers 0).Spec.Repo}}
+    path: {{.Steps.Location}}
+  steps: {}
+

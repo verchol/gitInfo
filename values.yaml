@@ -1,0 +1,13 @@
+Project:
+  name: "verchol/autogen"
+Triggers:
+  - name: "git"
+    spec:
+      triggerType: git
+      provider: github
+      repo: containers101/demochat
+      events:
+        - push
+      branchRegex: /.*/
+Steps:
+   location: ./codefresh.deploy.yaml

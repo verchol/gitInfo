@@ -1,0 +1,9 @@
+Triggers:
+  - name: "git"
+    spec:
+      triggerType: git
+      provider: github
+      repo: containers101/demochat
+      events:
+        - push
+      branchRegex: /.*/

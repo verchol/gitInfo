@@ -1,0 +1,29 @@
+version: '1.0'
+kind: pipeline
+metadata:
+  name: {{.Project.name}}/build_autogen
+  deprecate:
+    repoPipeline: true
+    applicationPort: '3000'
+  labels:
+    tags: ["docker", "build"]
+  project: {{.Project.name}}
+spec:
+  triggers:
+    - type: git
+      provider: github
+      repo: codefresh-io/webinarApr26
+      events:
+        - push
+      branchRegex: /.*/
+  contexts: []
+  variables:
+    - key: "test"
+      value: "moshe"
+      encrypted: false
+  specTemplate:
+    location: git
+    repo: {{.Triggers.repo}}
+    path: {{.Steps.location}}
+  steps: {}
+
